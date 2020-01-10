@@ -25,7 +25,7 @@
     [super viewDidLoad];
     //self.view.backgroundColor = [UIColor colorWithRed:252/255.0f green:252/255.0f blue:252/255.0f alpha:1.0f];
     self.view.backgroundColor = [UIColor grayColor];
-    self.title = @"alpha";
+    self.title = @"transform3D";
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.edgesForExtendedLayout = NO;
     self.navigationController.navigationBar.translucent = NO;
