@@ -62,6 +62,7 @@
     self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;
     //commit the transaction
     [CATransaction commit];
+    self.view.layer;
 }
 
 -(UIView *)containerView

@@ -116,6 +116,7 @@
         _digitView.layer.contentsGravity = kCAGravityResizeAspect;
         // 使用最近过滤算法，使得图片太放大太多倍数时不模糊
         _digitView.layer.magnificationFilter = kCAFilterNearest;
+        //_digitView.layer.magnificationFilter = kCAFilterLinear;
     }
     return _digitView;
 }
