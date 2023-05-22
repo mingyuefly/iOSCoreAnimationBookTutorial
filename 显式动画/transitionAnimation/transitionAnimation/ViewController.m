@@ -20,6 +20,7 @@
 //@property (nonatomic, strong) UIImageView *imageView3;
 @property (nonatomic, strong) UIView *imageView3;
 @property (nonatomic, strong) CALayer *imageLayer3;
+@property (nonatomic, strong) UIButton *button4;
 
 @end
 
@@ -47,15 +48,18 @@
     self.button3.center = CGPointMake(self.view.bounds.size.width / 2, 600);
     [self.imageView3.layer addSublayer:self.imageLayer3];
     self.imageLayer3.contentsCenter = self.imageView3.bounds;
+    [self.view addSubview:self.button4];
+    self.button4.center = CGPointMake(self.view.bounds.size.width / 2, 640);
 }
 
+#pragma mark - actions
 -(void)switchAction
 {
-//    if (!self.imageView.animating) {
-//        [self.imageView startAnimating];
-//    } else {
-//        [self.imageView stopAnimating];
-//    }
+    //    if (!self.imageView.animating) {
+    //        [self.imageView startAnimating];
+    //    } else {
+    //        [self.imageView stopAnimating];
+    //    }
     
     [UIView transitionWithView:self.imageView duration:1.0
                        options:UIViewAnimationOptionTransitionFlipFromLeft
@@ -90,6 +94,35 @@
     self.imageView.image = self.images[index];
 }
 
+-(void)switchAction4
+{
+    //preserve the current view snapshot
+    UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, YES, 0.0);
+    [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *coverImage = UIGraphicsGetImageFromCurrentImageContext();
+    //insert snapshot view in front of this one
+    UIView *coverView = [[UIImageView alloc] initWithImage:coverImage];
+    coverView.frame = self.view.bounds;
+    [self.view addSubview:coverView];
+    //update the view (we'll simply randomize the layer background color)
+    CGFloat red = arc4random() / (CGFloat)INT_MAX;
+    CGFloat green = arc4random() / (CGFloat)INT_MAX;
+    CGFloat blue = arc4random() / (CGFloat)INT_MAX;
+    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+    //perform animation (anything you like)
+    [UIView animateWithDuration:1.0 animations:^{
+        //scale, rotate and fade the view
+        CGAffineTransform transform = CGAffineTransformMakeScale(0.01, 0.01);
+        transform = CGAffineTransformRotate(transform, M_PI_2);
+        coverView.transform = transform;
+        coverView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        //remove the cover view now we're finished with it
+        [coverView removeFromSuperview];
+    }];
+}
+
+#pragma mark - property
 -(UIImageView *)imageView
 {
     if (!_imageView) {
@@ -194,6 +227,18 @@
         _imageLayer3.contents = (__bridge id _Nullable)(self.images[0].CGImage);
     }
     return _imageLayer3;
+}
+
+-(UIButton *)button4
+{
+    if (!_button4) {
+        _button4 = [UIButton buttonWithType:UIButtonTypeCustom];
+        _button4.frame = CGRectMake(0, 0, 200, 30);
+        [_button4 setTitle:@"switchImage4" forState:UIControlStateNormal];
+        [_button4 setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_button4 addTarget:self action:@selector(switchAction4) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _button4;
 }
 
 @end
