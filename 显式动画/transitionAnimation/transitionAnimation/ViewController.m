@@ -51,20 +51,30 @@
 
 -(void)switchAction
 {
-    if (!self.imageView.animating) {
-        [self.imageView startAnimating];
-    } else {
-        [self.imageView stopAnimating];
-    }
+//    if (!self.imageView.animating) {
+//        [self.imageView startAnimating];
+//    } else {
+//        [self.imageView stopAnimating];
+//    }
+    
+    [UIView transitionWithView:self.imageView duration:1.0
+                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                    animations:^{
+        //cycle to next image
+        UIImage *currentImage = self.imageView.image;
+        NSUInteger index = [self.images indexOfObject:currentImage];
+        index = (index + 1) % [self.images count];
+        self.imageView.image = self.images[index];
+    } completion:NULL];
 }
 
 -(void)switchAction2
 {
     CATransition *transition = [CATransition animation];
     transition.type = kCATransitionFade;
-//    transition.type = kCATransitionPush;
-//    transition.type = kCATransitionMoveIn;
-//    transition.type = kCATransitionReveal;
+    //    transition.type = kCATransitionPush;
+    //    transition.type = kCATransitionMoveIn;
+    //    transition.type = kCATransitionReveal;
     transition.duration = 2.0f;
     [self.imageView2.layer addAnimation:transition forKey:nil];
     UIImage *currentImage = self.imageView2.image;
