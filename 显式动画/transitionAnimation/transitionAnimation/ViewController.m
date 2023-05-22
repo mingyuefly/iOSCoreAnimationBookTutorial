@@ -16,6 +16,10 @@
 @property (nonatomic, strong) UIImageView *imageView2;
 @property (nonatomic, strong) UIButton *button2;
 @property (nonatomic, copy) NSArray<UIImage *> *images;
+@property (nonatomic, strong) UIButton *button3;
+//@property (nonatomic, strong) UIImageView *imageView3;
+@property (nonatomic, strong) UIView *imageView3;
+@property (nonatomic, strong) CALayer *imageLayer3;
 
 @end
 
@@ -37,6 +41,12 @@
     self.imageView2.center = CGPointMake(self.view.bounds.size.width / 2, 330);
     [self.view addSubview:self.button2];
     self.button2.center = CGPointMake(self.view.bounds.size.width / 2, 400);
+    [self.view addSubview:self.imageView3];
+    self.imageView3.center = CGPointMake(self.view.bounds.size.width / 2, 530);
+    [self.view addSubview:self.button3];
+    self.button3.center = CGPointMake(self.view.bounds.size.width / 2, 600);
+    [self.imageView3.layer addSublayer:self.imageLayer3];
+    self.imageLayer3.contentsCenter = self.imageView3.bounds;
 }
 
 -(void)switchAction
@@ -52,13 +62,22 @@
 {
     CATransition *transition = [CATransition animation];
     transition.type = kCATransitionFade;
-    //transition.type = kCATransitionPush;
+//    transition.type = kCATransitionPush;
+//    transition.type = kCATransitionMoveIn;
+//    transition.type = kCATransitionReveal;
     transition.duration = 2.0f;
     [self.imageView2.layer addAnimation:transition forKey:nil];
     UIImage *currentImage = self.imageView2.image;
     NSUInteger index = [self.images indexOfObject:currentImage];
     index = (index + 1) % [self.images count];
     self.imageView2.image = self.images[index];
+}
+
+-(void)switchAction3
+{
+    NSUInteger index = arc4random() % 4;
+    self.imageLayer3.contents = (__bridge id _Nullable)(self.images[index].CGImage);// 有隐式动画效果
+    self.imageView.image = self.images[index];
 }
 
 -(UIImageView *)imageView
@@ -136,5 +155,35 @@
 //        array;
 //    });
 //}
+
+-(UIButton *)button3
+{
+    if (!_button3) {
+        _button3 = [UIButton buttonWithType:UIButtonTypeCustom];
+        _button3.frame = CGRectMake(0, 0, 200, 30);
+        [_button3 setTitle:@"switchImage3" forState:UIControlStateNormal];
+        [_button3 setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_button3 addTarget:self action:@selector(switchAction3) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _button3;
+}
+
+-(UIView *)imageView3
+{
+    if (!_imageView3) {
+        _imageView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    }
+    return _imageView3;
+}
+
+-(CALayer *)imageLayer3
+{
+    if (!_imageLayer3) {
+        _imageLayer3 = [CALayer layer];
+        _imageLayer3.frame = CGRectMake(0, 0, 100, 100);
+        _imageLayer3.contents = (__bridge id _Nullable)(self.images[0].CGImage);
+    }
+    return _imageLayer3;
+}
 
 @end
